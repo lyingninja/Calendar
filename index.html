@@ -1,0 +1,562 @@
+<html>
+	<head>
+		<style>
+			*{
+				margin:0;
+				padding:0;
+				box-sizing:border-box;
+				}
+			html,body{
+				height:100vh;
+				-webkit-user-select: none;
+				width:120%;
+				}
+			.calendar{
+				height:max-content;
+				width:max-content;
+				}
+			.child{
+				position:absolute;
+				display:none;
+				margin:3% 8%;
+				line-height:2;
+				padding:2%;
+				border-radius:4px;
+				width:max-content;
+				background-color:#fff;
+				box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				}
+			.child:hover .son{
+				display: inline-block;
+				}
+			.son{
+                 background-color: #f9f9f9;
+                 padding:0px 16px;
+                 z-index: 1;
+				}
+			.table{
+				margin:5%;
+				padding:5%;
+				border-radius:16px;
+				box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				background:#00BFFF; 
+				width:100%;
+				}
+			.parent{
+				margin:5% 2%;
+				font-size:12px;
+				}
+			.month{
+				margin:0 40% 0 0%;
+				}
+			.back{
+				margin:0 5%;
+				border-style:none;
+				background:#00BFFF;
+				font-size:130%;
+				}
+			.next{
+				margin:0 5%;
+				border-style:none;
+				background:#00BFFF;
+				font-size:130%;
+				}
+			.year{
+				
+				}
+			.row{
+				display:grid;
+				grid-template-columns:repeat(7,1fr);
+				width:100%;
+				}
+			.th{
+				font-size:10px;
+				margin:0 5%;
+				padding:2%;
+				text-align:center;
+				}
+			.td{
+				padding:30% 0;
+				text-align:center;
+				}
+			.active{
+				background:#fff !important;
+				border-radius:50%;
+				box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				}
+			.event-day{
+				background:#FF8561;
+				box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				transform:translate(10,0);
+				transition:.5s ease-in;
+				}
+			.upcoming-events{
+				width:40%;
+				height:max-content;
+				float:right;
+				position:absolute;
+				top:3%; 
+				left:53%;
+				padding:0 5%;
+				line-height:4;
+				border-radius:4px;
+				box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				}
+			.current-time{
+				text-align:center;
+				font-weight:bold;
+				font-size:20px;
+				}
+			.time{
+				margin:3% 0 ;
+				}
+			time{
+				text-indent:100px;
+				}
+			.event{
+				margin:0 5%;
+				}
+			.event-summary{
+				width:max-content;
+				height:100%;
+				position:absolute;
+				top:3%;
+				left:100%;
+				padding:0 5%;
+				line-height:4;
+				border-radius:4px;
+				box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+				}
+			.event-summary div:first-child{
+				text-align:center;
+				font-weight:bold;
+				font-size:20px;
+				}
+		</style>
+	</head>
+	<body onload="initial()">
+		<div class="calendar">
+			<div class="child">
+				<div class="son">
+					<div onclick="setMonth(0)">January</div>
+					<div onclick="setMonth(1)">February</div>
+					<div onclick="setMonth(2)">March</div>
+				</div>
+				<div class="son">
+					<div onclick="setMonth(3)">April</div>
+					<div onclick="setMonth(4)">May</div>
+					<div onclick="setMonth(5)">June</div>
+				</div>
+				<div class="son">
+					<div onclick="setMonth(6)">July</div>
+					<div onclick="setMonth(7)">August</div>
+					<div onclick="setMonth(8)">September</div>
+				</div>
+				<div class="son">
+					<div onclick="setMonth(9)">October</div>
+					<div onclick="setMonth(10)">November</div>
+					<div onclick="setMonth(11)">December</div>
+				</div>
+			</div>
+			<div class="table">
+				<div class="parent">
+			        <span class="month">February</span>
+			        <button class="back">&lt;</button>
+			        <span class="year">2021</span>
+			        <button class="next">&gt;</button>
+			    </div>
+				<div class="row">
+					<span class="th">Sunday</span>
+					<span class="th">Monday</span>
+					<span class="th">Tuesday</span>
+					<span class="th">Wednesday</span>
+					<span class="th">Thursday</span>
+					<span class="th">Friday</span>
+					<span class="th">Saturday</span>
+				</div>
+				<br>
+				<div class="row">
+					<span class="td" onclick="dateClicked(0)"></span>
+					<span class="td" onclick="dateClicked(1)"></span>
+					<span class="td" onclick="dateClicked(2)"></span>
+					<span class="td" onclick="dateClicked(3)"></span>
+					<span class="td" onclick="dateClicked(4)"></span>
+					<span class="td" onclick="dateClicked(5)"></span>
+					<span class="td" onclick="dateClicked(6)"></span>
+				</div>
+				<div class="row">
+					<span class="td" onclick="dateClicked(7)"></span>
+					<span class="td" onclick="dateClicked(8)"></span>
+					<span class="td" onclick="dateClicked(9)"></span>
+					<span class="td" onclick="dateClicked(10)"></span>
+					<span class="td" onclick="dateClicked(11)"></span>
+					<span class="td" onclick="dateClicked(12)"></span>
+					<span class="td" onclick="dateClicked(13)"></span>
+				</div>
+				<div class="row">
+					<span class="td" onclick="dateClicked(14)"></span>
+					<span class="td" onclick="dateClicked(15)"></span>
+					<span class="td" onclick="dateClicked(16)"></span>
+					<span class="td" onclick="dateClicked(17)"></span>
+					<span class="td" onclick="dateClicked(18)"></span>
+					<span class="td" onclick="dateClicked(19)"></span>
+					<span class="td" onclick="dateClicked(20)"></span>
+				</div>
+				<div class="row">
+					<span class="td" onclick="dateClicked(21)"></span>
+					<span class="td" onclick="dateClicked(22)"></span>
+					<span class="td" onclick="dateClicked(23)"></span>
+					<span class="td" onclick="dateClicked(24)"></span>
+					<span class="td" onclick="dateClicked(25)"></span>
+					<span class="td" onclick="dateClicked(26)"></span>
+					<span class="td" onclick="dateClicked(27)"></span>
+				</div>
+				<div class="row">
+					<span class="td" onclick="dateClicked(28)"></span>
+					<span class="td" onclick="dateClicked(29)"></span>
+					<span class="td" onclick="dateClicked(30)"></span>
+					<span class="td" onclick="dateClicked(31)"></span>
+					<span class="td" onclick="dateClicked(32)"></span>
+					<span class="td" onclick="dateClicked(33)"></span>
+					<span class="td" onclick="dateClicked(34)"></span>
+				</div>
+				<div class="row">
+					<span class="td" onclick="dateClicked(35)"></span>
+					<span class="td" onclick="dateClicked(36)"></span>
+					<span class="td" onclick="dateClicked(37)"></span>
+					<span class="td" onclick="dateClicked(38)"></span>
+					<span class="td" onclick="dateClicked(39)"></span>
+					<span class="td" onclick="dateClicked(40)"></span>
+					<span class="td" onclick="dateClicked(41)"></span>
+				</div>
+			</div>
+		</div>
+		<div class="upcoming-events">
+			<div class="current-time">
+				Events
+			</div>
+			<div class="time">
+				<time>12 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>1 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>2 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>3 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>4 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>5 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>6 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>7 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>8 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>9 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>10 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>11 AM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>12 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>1 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>2 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>3 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>4 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>5 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>6 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>7 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>8 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>9 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>10 PM</time>
+				<span class="event">
+					
+				</span>
+				<br>
+				<time>11 PM</time>
+				<span class="event">
+					
+				</span>
+		    </div>
+		</div>
+		<div class="event-summary">
+			<div>Event Summary</div>
+			<div class="event-s"></div>
+		</div>
+		<script>
+			var month_array =["January","February","March","April","May","June","July","August","September","October","November","December"];
+			var i;
+			var back = document.querySelector(".back");
+			var next = document.querySelector(".next");
+			var month = document.querySelector(".month");
+			var year = document.querySelector(".year");
+			var td = document.querySelectorAll(".td");
+			var no = 0;
+			var event_array = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],["","","","","","","","","","","","","","","","","","Study machine learning"],["","","","","","","","","Get clothes from dry cleaner","","","","","","","","","Meet with spectra",""],["","","","","","","","","","Puchase milk"],[],[],[],[],[]];
+			var event = document.querySelectorAll(".event");
+			var eventSummary= document.querySelector(".event-s");
+			var table = document.querySelector(".table");
+			var child = document.querySelector(".child");
+			var parent = document.querySelector(".parent");
+			
+
+
+
+			
+			
+			function setMonth(i)
+			{
+				month.innerHTML = month_array[i];
+				child.style.display = "none";
+				parent.style.display = "";
+				getCalendar(month_array.indexOf(month.innerHTML),year.innerHTML);
+			}
+			
+			
+			
+			
+			function dateClicked(i)
+			{
+				if(td[i] != "" || td[i].innerHTML.length == 0 || td[i].innerHTML == null || !td[i].innerHTML)
+				{
+				    getEvent(month_array.indexOf(month.innerHTML),year.innerHTML,td[i].innerHTML);
+				   for(j = 0; j<42;j++)
+				   {
+					    if(td[j].classList.contains("event-day"))
+				       {
+						     td[j].classList.remove("event-day"); 
+					    }
+				    }
+					td[i].classList.add("event-day");
+				}
+			}
+
+
+
+
+
+
+			month.onclick = function ()
+			{
+				document.querySelector(".parent").style.display = "none";
+				document.querySelector(".child").style.display = "flex";
+				getCalendar(month_array.indexOf(month.innerHTML),year.innerHTML);
+			};
+			
+			
+			
+			
+			back.onclick = function ()
+			{
+				var no= year.innerHTML;
+				year.innerHTML = parseInt(no)-1;
+				getCalendar(month_array.indexOf(month.innerHTML),year.innerHTML);
+			};
+			
+			
+			
+			
+			
+			next.onclick = function ()
+			{
+				var no= year.innerHTML;
+				year.innerHTML = parseInt(no)+1;
+				getCalendar(month_array.indexOf(month.innerHTML),year.innerHTML);
+			};
+			
+			
+			function initial ()
+			{
+				var date = new Date();
+				getCalendar(date.getMonth(),date.getFullYear());
+				
+			}
+			
+			
+			function getFeb(years)
+			{
+				return((parseInt(years)%4===0)?29:28);
+			}
+			
+			
+			
+			
+			function getCalendar (months,years)
+			{
+				var days_array = [31,getFeb(year),31,30,31,30,31,31,30,31,30,31];
+				month.innerHTML = month_array[months];
+				year.innerHTML = years;
+				var first_day = new Date(years,months,1);
+				var today = new Date();
+				for(i=0;i<42;i++)
+				{
+					if(i>=first_day.getDay() && i<days_array[months]+first_day.getDay())
+					{
+						td[i].innerHTML = i -first_day.getDay()+1;
+					}
+					else{
+						td[i].innerHTML = "";
+					}
+				}
+				for(j = 0; j<42;j++)
+			    {
+					    if(td[j].classList.contains("event-day"))
+				       {
+						     td[j].classList.remove("event-day"); 
+					    }
+				 }
+				for(i = 0; i<42;i++)
+				{
+					if(td[i].classList.contains("active"))
+					{
+						td[i].classList.remove("active");
+					}
+				}
+				activeDay(months,years);
+				getEvent(months+1,years,today.getDate());
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			function activeDay (months,years)
+			{
+				var d = new Date();
+				if(years == d.getFullYear() && months == d.getMonth())
+				{
+					console.log(d.getDate()+d.getDay()-1);
+					for(i=0;i<42;i++)
+					{
+						if(td[i].innerHTML == d.getDate())
+						{
+							td[i].classList.add("active");
+						}
+					}
+					//td[d.getDate()+d.getDay()-1].classList.add("active");
+				}
+			}
+			
+			
+			
+			
+
+
+
+
+			
+			
+			
+			function getEvent (months,years,date)
+			{
+				var days_array = [31,getFeb(year),31,30,31,30,31,31,30,31,30,31];
+				if(typeof(date) !== null || date !== NaN || date !== "" )
+				{
+				eventSummary.innerHTML = "";
+			    for( i =date-1; i<date;i++)
+				{
+					for( j=0; j<event.length;j++)
+					{
+						if(event_array[i][j] === undefined)
+						{
+							event[j].innerHTML = "";
+						}
+						else{
+							event[j].innerHTML = event_array[i][j];
+							if(event_array[i][j] != "")
+							{
+								eventSummary.innerHTML += event_array[i][j] + "<br>"; 
+							}
+						}
+					}
+				}
+				}
+			}
+			
+		</script>
+	</body>
+</html>
